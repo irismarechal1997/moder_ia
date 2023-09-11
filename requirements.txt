@@ -1,0 +1,8 @@
+pandas
+numpy
+seaborn
+matplotlib
+tensorflow
+scikit-learn
+google-auth
+google-cloud-storage
