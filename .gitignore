@@ -2,5 +2,5 @@ raw_data/
 .env
 .ipynb_checkpoints/
 moder_ia.egg-info/
-moder_ia/__pycache__/
+utils/__pycache__/
 notebook/__pycache__/
