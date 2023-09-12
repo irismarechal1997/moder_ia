@@ -6,3 +6,6 @@ tensorflow
 scikit-learn
 google-auth
 google-cloud-storage
+notebook
+jupyter
+nltk
