@@ -1,4 +1,4 @@
-from moder_ia.data_cleaning import cleaning_data
+from utils.data_cleaning import cleaning_data
 import pandas as pd
 
 data_1 = pd.read_csv('raw_data/230911_Hate_Speech_Classification_01.csv', encoding='latin-1')
