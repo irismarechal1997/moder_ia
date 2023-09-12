@@ -71,7 +71,5 @@ def cleaning_data(data_1, data_2, hatespeech, hateXplain):
     concatenated_df_4=concatenated_df_4.reset_index(drop=True)
 
 
-    #Download
-    concatenated_df_4.to_csv('data/clean_dataset_v3.csv', index=False)
 
     return concatenated_df_4
