@@ -7,7 +7,7 @@ import os
 
 #clearning data
 
-def cleaning_data(data_1, data_2, hatespeech, hateXplain):
+def cleaning_data(data_1, data_2, hatespeech, hateXplain, data_5):
 
     #data_1
     new_column_data = 'Hate_Speech_Classification_01'
@@ -54,6 +54,22 @@ def cleaning_data(data_1, data_2, hatespeech, hateXplain):
     hateXplain = hateXplain[['source', 'text', 'offensive']].copy()
     hateXplain['text']=hateXplain['text'].astype(str)
     hateXplain['text']=hateXplain['text'].str.replace("'", "").str.replace(",", "").str.strip()
+    hateXplain['text'] = hateXplain['text'].str.strip("[]")
+
+    #data_5
+    data_5['source']='Happy_tweets'
+    data_5=data_5[['source','Text','Label','Language']].copy()
+    data_5=data_5.rename(columns={'Text':'text'})
+    data_5=data_5.rename(columns={'Label':'offensive'})
+    data_5=data_5[data_5['Language']=='en']
+    data_5=data_5[data_5['offensive']=='positive']
+    data_5['offensive']=0
+    data_5=data_5[['source','text','offensive']].copy()
+    data_5.reset_index(inplace=True, drop=True)
+    masque = data_5.index < 66000
+    data_5 = data_5[masque]
+
+
 
 
 
@@ -70,6 +86,9 @@ def cleaning_data(data_1, data_2, hatespeech, hateXplain):
     concatenated_df_4=concatenated_df_4[~concatenated_df_4[['text','offensive']].duplicated()]
     concatenated_df_4=concatenated_df_4.reset_index(drop=True)
 
+    concatenated_df_5=pd.concat([concatenated_df_4,data_5])
+    concatenated_df_5=concatenated_df_5[~concatenated_df_5[['text','offensive']].duplicated()]
+    concatenated_df_5=concatenated_df_5.reset_index(drop=True)
 
 
-    return concatenated_df_4
+    return concatenated_df_5
