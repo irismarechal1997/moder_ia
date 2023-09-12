@@ -4,4 +4,5 @@ with open('requirements.txt') as f :
 requirements = [x.strip() for x in content]
 setup(name='moder_ia',
       description='morder_ia description',
-      packages=[])
+      packages=[],
+      install_requires=requirements)
