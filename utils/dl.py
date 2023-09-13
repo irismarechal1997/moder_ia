@@ -7,18 +7,22 @@ from keras.preprocessing.text import Tokenizer
 import tensorflow_datasets as tfds
 from keras_preprocessing.text import text_to_word_sequence
 from sklearn.model_selection import train_test_split
-from tensorflow.keras import layers, Sequential
+from keras import layers
+from keras.layers import Dense
+from keras.models import Sequential
+from keras.callbacks import EarlyStopping
+from sklearn.preprocessing import StandardScaler
 
 data_processed = pd.read_csv("/home/luades/code/irismarechal1997/moder_ia/data/processed_dataset_v1.csv")
 
-def LSTM_model(data_processed):
+def LSTM_model(processed=True):
 
     if processed :
         X = data_processed["text"]
         y = data_processed["offensive"]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=3)
     else :
-        X = X_proc
+        X = data_processed["text_processed"]
         y = data_processed["offensive"]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=3)
 
@@ -57,8 +61,6 @@ def LSTM_model(data_processed):
                 metrics=['accuracy'])
 
 
-    from tensorflow.keras.callbacks import EarlyStopping
-
     es = EarlyStopping(patience=4, restore_best_weights=True)
 
     model.fit(X_train_pad, y_train,
@@ -67,8 +69,4 @@ def LSTM_model(data_processed):
             callbacks=[es]
             )
 
-    print(model.evaluate(scaler.transform(X_test), y_test))
-
-    print(model.predict(scaler.transform(X_test)))
-
-    return model
+    return model.evaluate(X_test_pad, y_test)
