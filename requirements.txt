@@ -9,3 +9,4 @@ google-cloud-storage
 notebook
 jupyter
 nltk
+TensorFlow
