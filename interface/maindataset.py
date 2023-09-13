@@ -1,18 +1,33 @@
 from utils.data_cleaning import cleaning_data
+from utils.data_preproc import cleaning_table, cleaning_text
 import pandas as pd
 
-data_1 = pd.read_csv('raw_data/230911_Hate_Speech_Classification_01.csv', encoding='latin-1')
-data_2 = pd.read_csv('raw_data/230911_Hate_Speech_and_Offensive_Language_01.csv')
-hatespeech = pd.read_csv('raw_data/230911_Dynamically_Generated_Hate_Speech_01.csv')
-hateXplain = pd.read_json('raw_data/230911_HateXplain.json')
-data_5=pd.read_csv('raw_data/11092023_Happy_Tweet.csv')
+def data_processed(parent=True):
+    ## Concatenate and pre clean data
+    data_1 = pd.read_csv('raw_data/230911_Hate_Speech_Classification_01.csv', encoding='latin-1')
+    data_2 = pd.read_csv('raw_data/230911_Hate_Speech_and_Offensive_Language_01.csv')
+    hatespeech = pd.read_csv('raw_data/230911_Dynamically_Generated_Hate_Speech_01.csv')
+    hateXplain = pd.read_json('raw_data/230911_HateXplain.json')
+    data_5=pd.read_csv('raw_data/11092023_Happy_Tweet.csv')
+
+    if parent==True:
+        target_path='data/clean_dataset_v6.csv'
+    else:
+        target_path='../data/clean_dataset_v6.csv'
+    cleaning_data(data_1,data_2,hatespeech,hateXplain, data_5).to_csv(target_path, index=False)
+
+    clean_data = pd.read_csv("data/clean_dataset_v6.csv") # assign variable
+    print("✅ clean_data_set generated \n")
+
+    ## Pre_process data
+    data_processed = cleaning_table(clean_data) # remove duplicates, ...
+    data_processed["text_processed"] = data_processed["text"].apply(cleaning_text) # advanced cleaning
+
+    data_processed.to_csv("data/processed_dataset_v1.csv", index= False) # generate a file
 
 
-parent=True #si notebook false
-#Download
-if parent==True:
-    target_path='data/clean_dataset_v6.csv'
-else:
-    target_path='../data/clean_dataset_v6.csv'
+    print("✅ preprocess() done, processed_dataset generated \n")
+    return data_processed
 
-cleaning_data(data_1,data_2,hatespeech,hateXplain, data_5).to_csv(target_path, index=False)
+if __name__ == "__main__": ## dire quelle fonction
+    data_processed(parent=True)

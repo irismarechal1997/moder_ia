@@ -90,5 +90,5 @@ def cleaning_data(data_1, data_2, hatespeech, hateXplain, data_5):
     concatenated_df_5=concatenated_df_5[~concatenated_df_5[['text','offensive']].duplicated()]
     concatenated_df_5=concatenated_df_5.reset_index(drop=True)
 
-
+    concatenated_df_5.drop(index = 82446 , inplace=True) # removing a text with "." only
     return concatenated_df_5
