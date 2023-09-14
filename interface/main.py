@@ -4,7 +4,7 @@
 from utils.ml_baseline import baseline_model
 import pandas as pd
 from utils.registry import save_model, load_model
-from utils.dl import GRU_model, LSTM_model, Conv1D_modelGo
+from utils.dl import GRU_model, LSTM_model, Conv1D_model
 
 ### Baseline_model
 
@@ -41,13 +41,13 @@ def pred_baseline(X_pred: str = None) -> str:
 
 ### Train DeepL models
 
-def train_DL_model(processed=False, model_name): ### select Conv1D, or GRU, or LSTM
+def train_DL_model(processed=False, model_name= any): ### select Conv1D, or GRU, or LSTM
 
     if model_name == "Conv1D":
         if processed:
-            model = Conv1D_modelGo()
+            model = Conv1D_model()
         else:
-            model = Conv1D_modelGo(processed = False)
+            model = Conv1D_model(processed = False)
         save_model(model, "Conv1D")
         print(f"✅ Model {model} successfully saved locally")
 
@@ -71,7 +71,7 @@ def train_DL_model(processed=False, model_name): ### select Conv1D, or GRU, or L
 
 ### Predict with  DeepL models
 
-def pred_DL(X_pred: str = None, model_name) -> str:
+def pred_DL(X_pred: str = None, model_name=any) -> str:
     """
     Make a prediction using the latest trained model
     """
@@ -95,8 +95,5 @@ def pred_DL(X_pred: str = None, model_name) -> str:
 
 
 if __name__ == "__main__":
-    while True:
-        X_pred = str(input("Enter a tweet: "))
-        pred_baseline(X_pred)
-        train_DL_model(processed=False, model_name)
-        pred_DL(X_pred: str = None, model_name)
+
+    train_DL_model(processed=False, model_name='LSTM')
