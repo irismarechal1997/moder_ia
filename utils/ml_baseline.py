@@ -52,15 +52,11 @@ def baseline_model(processed=True):
     TfidfVectorizer(),
     MultinomialNB())
 
-    pipeline_naive_bayes = make_pipeline(
-    TfidfVectorizer(),
-    MultinomialNB())
-
     if processed:
         model = pipeline_naive_bayes.fit(X_proc, y)
 
     else:
         model = pipeline_naive_bayes.fit(X, y)
 
-    print(f"model trained, accuracy score is {round(model.score(X,y),2)}, , model with {processed=}")
+    print(f"model trained, accuracy score is {round(model.score(X,y),2)}, model with {processed=}")
     return model
