@@ -4,6 +4,7 @@ import pandas as pd
 from utils.registry import save_model, load_model
 from utils.ml_baseline import baseline_model
 from utils.dl import GRU_model, LSTM_model, Conv1D_model
+from utils.bert_binary import  bert_model_1
 
 ### Baseline_model
 
@@ -41,7 +42,7 @@ def pred_baseline(X_pred: str = None) -> str:
 ### Train DeepL models
 
 def train_DL_model(model_name, processed=False): ### select Conv1D, or GRU, or LSTM
-# def train_DL_model(processed=False, model_name= any): ### select Conv1D, or GRU, or LSTM
+
 
     if model_name == "Conv1D":
         if processed:
@@ -49,7 +50,7 @@ def train_DL_model(model_name, processed=False): ### select Conv1D, or GRU, or L
         else:
             model = Conv1D_model(processed = False)
         save_model(model, "Conv1D")
-        print(f"✅ Model {model} successfully saved locally")
+        print(f"✅ Model successfully saved locally")
 
     if model_name == "GRU":
         if processed:
@@ -57,7 +58,7 @@ def train_DL_model(model_name, processed=False): ### select Conv1D, or GRU, or L
         else:
             model = GRU_model(processed = False)
         save_model(model, "GRU")
-        print(f"✅ Model {model} successfully saved locally")
+        print(f"✅ Model successfully saved locally")
 
     if model_name == "LSTM":
         if processed:
@@ -65,13 +66,20 @@ def train_DL_model(model_name, processed=False): ### select Conv1D, or GRU, or L
         else:
             model = LSTM_model(processed = False)
         save_model(model, "LSTM")
-        print(f"✅ Model {model} successfully saved locally")
+        print(f"✅ Model successfully saved locally")
+
+    if model_name == "bert_binary":
+        if processed:
+            model = bert_model_1()
+        else:
+            model = bert_model_1(processed = False)
+        save_model(model, "bert_binary_v1")
+        print(f"✅ Model successfully saved locally")
 
     return model
 
 ### Predict with  DeepL models
 
-# def pred_DL(model_name, X_pred: str = None) -> str:
 def pred_DL(X_pred: str = None, model_name=any) -> str:
     """
     Make a prediction using the latest trained model
@@ -103,5 +111,5 @@ if __name__ == "__main__":
     #     train_DL_model(model_name, processed=False)
     #     pred_DL(model_name, X_pred)
 
-    model_name = str(input("Enter model name between LSTM, GRU and Conv1D : "))
+    model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
     train_DL_model(model_name,processed=False)
