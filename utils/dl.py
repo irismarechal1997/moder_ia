@@ -7,6 +7,8 @@ from keras.utils import pad_sequences
 
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.text import text_to_word_sequence
+from keras.preprocessing.text import Tokenizer
+# import tensorflow_datasets as tfds
 from sklearn.model_selection import train_test_split
 from keras import layers
 from keras.layers import Dense
