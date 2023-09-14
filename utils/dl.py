@@ -1,19 +1,19 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
-import tensorflow as tf
-import keras
-from keras.utils import pad_sequences
+#import tensorflow as tf
+#import keras
+from tensorflow.keras.utils import pad_sequences
 
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.text import text_to_word_sequence
 from keras.preprocessing.text import Tokenizer
 # import tensorflow_datasets as tfds
 from sklearn.model_selection import train_test_split
-from keras import layers
-from keras.layers import Dense
-from keras.models import Sequential
-from keras.callbacks import EarlyStopping
+from tensorflow.keras import layers
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.callbacks import EarlyStopping
 
 
 def LSTM_model(processed=True):
@@ -134,6 +134,8 @@ def GRU_model(processed=True):
 
 
 def Conv1D_model(processed=True):
+
+    data_processed = pd.read_csv("data/"+"processed_dataset_v1.csv")
 
     if processed :
         X = data_processed["text"]
