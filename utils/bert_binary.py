@@ -2,7 +2,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from transformers import BertConfig, AutoTokenizer, TFBertModel, BertTokenizer, TFBertForSequenceClassification, BertModel
-import numpy as np
+#import numpy as np
 from tensorflow import keras
 from tensorflow.keras import layers
 from sklearn.model_selection import train_test_split
@@ -10,10 +10,10 @@ from sklearn.model_selection import cross_validate
 from tensorflow.keras.callbacks import EarlyStopping
 
 
-def bert_model_1(data_processed_1):
+def bert_model_1(processed=False):
 
     #quick cleaning
-    data=data_processed_1
+    data=pd.read_csv('data/processed_dataset_v1.csv', nrows=10000)
     data['text_processed'] = data['text_processed'].astype(str)
     data['text_processed'] = data['text_processed'].str.strip()
 
@@ -30,8 +30,8 @@ def bert_model_1(data_processed_1):
     # Initializing a BERT mini model style configuration
 
     config = BertConfig.from_pretrained('prajjwal1/bert-mini')
-    config.hidden_size = 256
-    config.num_hidden_layers = 6
+    #config.hidden_size = 256
+    #config.num_hidden_layers = 6
     tokenizer_mini = BertTokenizer.from_pretrained('prajjwal1/bert-mini')
     model_mini = TFBertForSequenceClassification.from_pretrained('prajjwal1/bert-mini',from_pt=True, config=config)
     optimizer=keras.optimizers.Adam(learning_rate=0.0001)
