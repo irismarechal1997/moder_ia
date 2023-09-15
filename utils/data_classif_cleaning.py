@@ -7,9 +7,6 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-data=pd.read_csv('/raw_data/measuring_hate_speech.csv')
-
-
 def classif_cleaning(data):
 
     #deleter all columns related to the annotator (i.e the person that analyzed the text)
@@ -67,16 +64,21 @@ def classif_cleaning(data):
         except:
             return False
 
+    print("✅ english filtering done \n")
+
     data_1= data_1[data_1['text'].apply(is_english)]
     data_1.drop(columns ="ageism", inplace = True)
     data_1.drop(columns ="validism", inplace = True)
 
-        #encoding categories with 0 and 1
+
+    #encoding categories with 0 and 1
     for row in ['racism', 'religion', 'xenophobia', 'misogyny', 'transphobia', 'homophobia']:
         data_1[row] = data_1[row].replace({False: 0, True: 1})
 
     data_1 = data_1.drop_duplicates() # Remove duplicates
     data_1 = data_1.dropna(subset=['text']) # Remove n.a. values in columns 'Label' => check column
+
+    print("✅ columns cleaning done \n")
 
     def cleaning_table(data):
         data.drop(columns ="hate_speech_score", inplace = True)
@@ -125,7 +127,9 @@ def classif_cleaning(data):
 
 
     data_processed = cleaning_table(data_1)
-    data_processed = cleaning_text(data_processed)
+    print("✅ tables cleaned \n")
+
     data_processed["text_processed"] = data_processed["text"].apply(cleaning_text)
+    print("✅ data processed \n")
 
     return data_processed
