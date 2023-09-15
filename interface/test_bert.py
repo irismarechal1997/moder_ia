@@ -9,6 +9,6 @@ from sklearn.model_selection import cross_validate
 from tensorflow.keras.callbacks import EarlyStopping
 from utils.bert_binary import bert_model_1
 
-data_processed_1=pd.read_csv('data/processed_dataset_v1.csv', nrows=30000)
+data_processed_1=pd.read_csv('data/processed_dataset_v1.csv')
 
-bert_model_1(data_processed_1)
+bert_model_1()
