@@ -11,4 +11,4 @@ jupyter
 nltk
 TensorFlow
 transformers
-torch torch vision
+torch

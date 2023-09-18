@@ -57,6 +57,9 @@ def classif_cleaning(data):
               'target_age': 'ageism',
               'target_disability':'validism'}, inplace = True )
 
+    print("✅ concat done \n")
+
+
     # only keep tweets in English
     def is_english(text):
         try:
@@ -64,12 +67,13 @@ def classif_cleaning(data):
         except:
             return False
 
-    print("✅ english filtering done \n")
+
 
     data_1= data_1[data_1['text'].apply(is_english)]
     data_1.drop(columns ="ageism", inplace = True)
     data_1.drop(columns ="validism", inplace = True)
 
+    print("✅ english filtering done \n")
 
     #encoding categories with 0 and 1
     for row in ['racism', 'religion', 'xenophobia', 'misogyny', 'transphobia', 'homophobia']:
@@ -79,20 +83,6 @@ def classif_cleaning(data):
     data_1 = data_1.dropna(subset=['text']) # Remove n.a. values in columns 'Label' => check column
 
     print("✅ columns cleaning done \n")
-
-    def cleaning_table(data):
-        data.drop(columns ="hate_speech_score", inplace = True)
-        data.rename(columns={'target_race': 'racism',
-              'target_religion': 'religion',
-              'target_origin': 'xenophobia',
-              'target_gender_women':'misogyny',
-              'target_gender_without_women':'transphobia',
-              'target_sexuality': 'homophobia',
-              'target_age': 'ageism',
-              'target_disability':'validism'}, inplace = True )
-        data.drop(columns ="ageism", inplace = True) #removing labels ageism and validism
-        data.drop(columns ="validism", inplace = True)
-        return data
 
     def cleaning_text(sentence: str) -> str:
         # Basic cleaning
@@ -126,10 +116,7 @@ def classif_cleaning(data):
         return cleaned_sentence
 
 
-    data_processed = cleaning_table(data_1)
-    print("✅ tables cleaned \n")
-
-    data_processed["text_processed"] = data_processed["text"].apply(cleaning_text)
+    data_1["text_processed"] = data_1["text"].apply(cleaning_text)
     print("✅ data processed \n")
 
-    return data_processed
+    return data_1
