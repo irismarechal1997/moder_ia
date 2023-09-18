@@ -1,5 +1,4 @@
 import pandas as pd
-from langdetect import detect
 import tensorflow as tf
 from transformers import BertConfig, AutoTokenizer, TFBertModel, BertTokenizer, TFBertForSequenceClassification, BertModel
 from sklearn.model_selection import train_test_split
@@ -10,13 +9,10 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import hamming_loss
 
 
-
-
-
 def bert_classif():
     data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv")
-    texts = data_extracted['text']
-    labels = data_extracted.drop(['text'],axis=1)
+    texts = data_extracted['text_processed']
+    labels = data_extracted.drop(['text','text_processed'],axis=1)
 
     #transfor the X into a list of string
     text_to_encode=texts.values.tolist()
@@ -43,7 +39,7 @@ def bert_classif():
     num_classes = len(unique_classes)
 
     # Step 2: Model Building
-    model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=8)
+    model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=6)
 
     optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
     loss = tf.keras.losses.BinaryCrossentropy()
@@ -57,16 +53,6 @@ def bert_classif():
     train_inputs_tuple,train_labels,
     epochs=20,
     batch_size=32)
-
-    train_predictions = model.predict(train_inputs_tuple)
-    test_predictions = model.predict(test_inputs_tuple)
-
-    # Calculate Hamming Loss for train and test separately
-    train_hamming_loss = hamming_loss(train_labels, (train_predictions > threshold))
-    test_hamming_loss = hamming_loss(test_labels, (test_predictions > threshold))
-
-    print("Train Hamming Loss:", train_hamming_loss)
-    print("Test Hamming Loss:", test_hamming_loss)
 
 
     train_predictions = model.predict(train_inputs_tuple)
