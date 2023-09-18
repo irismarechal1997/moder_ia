@@ -11,8 +11,10 @@ from sklearn.metrics import hamming_loss
 
 
 
-data = #to be filled with data cleaned and processed
-def bert_classif(data_extracted):
+
+
+def bert_classif():
+    data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv")
     texts = data_extracted['text']
     labels = data_extracted.drop(['text'],axis=1)
 
@@ -71,19 +73,20 @@ def bert_classif(data_extracted):
     test_predictions = model.predict(test_inputs_tuple)
 
     # Calculate Hamming Loss for train and test separately
+    threshold = 0.5
     train_hamming_loss = hamming_loss(train_labels, (train_predictions > threshold))
     test_hamming_loss = hamming_loss(test_labels, (test_predictions > threshold))
 
     print("Train Hamming Loss:", train_hamming_loss)
     print("Test Hamming Loss:", test_hamming_loss)
 
-    # Step 5: Inference
-    # You can use the trained model for inference on new text data
-    input = input("Rentrez un nouveau tweet")
-    new_texts=pd.DataFrame[input]
+    # # Step 5: Inference
+    # # You can use the trained model for inference on new text data
+    # input = input("Rentrez un nouveau tweet")
+    # new_texts=pd.DataFrame[input]
 
-    new_texts_tokenized=tokenizer(new_text, add_special_tokens=True, truncation=True, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
+    # new_texts_tokenized=tokenizer(new_texts, add_special_tokens=True, truncation=True, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
 
-    new_prediction=model.predict(new_texts_tokenized)
+    # new_prediction=model.predict(new_texts_tokenized)
 
-    return new_prediction
+    return model
