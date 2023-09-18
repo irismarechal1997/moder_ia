@@ -89,4 +89,4 @@ def bert_classif():
 
     # new_prediction=model.predict(new_texts_tokenized)
 
-    return new_prediction
+    return model
