@@ -6,11 +6,24 @@ from sklearn.metrics import classification_report
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.metrics import hamming_loss
+
+
+# def hamming_loss(y_true, y_pred, threshold=0.5):
+#     y_true = tf.convert_to_tensor(y_true, dtype=tf.float32)
+#     y_pred = tf.convert_to_tensor(y_pred, dtype=tf.float32)
+
+# # Apply the threshold to the predicted values
+#     y_pred = tf.cast(y_pred > threshold, dtype=tf.float32)
+
+#  # Calculate the Hamming Loss\
+#     epsilon = 1e-7  # Small epsilon value\n",
+#     hamming_loss = 1.0 - tf.reduce_mean(tf.reduce_sum(y_true * y_pred, axis=1) / (tf.reduce_sum(y_true + y_pred - y_true * y_pred, axis=1) + epsilon))
+
+#     return hamming_loss.numpy()
 
 
 def bert_classif():
-    data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv")
+    data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv").loc[1:10,:]
     texts = data_extracted['text_processed']
     labels = data_extracted.drop(['text','text_processed'],axis=1)
 
@@ -44,30 +57,30 @@ def bert_classif():
     for layer in model.layers[:-2]:
         layer.trainable=False
 
-    optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
     loss = tf.keras.losses.BinaryCrossentropy()
 
 
     # Compile the model
-    model.compile(optimizer=optimizer, loss=loss)
+    model.compile(optimizer='adam', loss=loss, metrics=['accuracy', 'Recall', 'Precision' ])
 
     # fitting
     history = model.fit(
     train_inputs_tuple,train_labels,
     epochs=5,
-    batch_size=128)
+    batch_size=128,
+    validation_split=0.1)
 
     print(model.summary())
 
-    train_predictions = model.predict(train_inputs_tuple)
-    test_predictions = model.predict(test_inputs_tuple)
+    # train_predictions = model.predict(train_inputs_tuple)
+    # test_predictions = model.predict(test_inputs_tuple)
 
-    # Calculate Hamming Loss for train and test separately
-    train_hamming_loss = hamming_loss(train_labels, train_predictions)
-    test_hamming_loss = hamming_loss(test_labels, test_predictions)
+    # # Calculate Hamming Loss for train and test separately
+    # train_hamming_loss = hamming_loss(train_predictions, train_labels)
+    # test_hamming_loss = hamming_loss(test_predictions, test_labels)
 
-    print("Train Hamming Loss:", train_hamming_loss)
-    print("Test Hamming Loss:", test_hamming_loss)
+    # print("Train Hamming Loss:", train_hamming_loss)
+    # print("Test Hamming Loss:", test_hamming_loss)
 
     # # Step 5: Inference
     # # You can use the trained model for inference on new text data
@@ -78,4 +91,4 @@ def bert_classif():
 
     # new_prediction=model.predict(new_texts_tokenized)
 
-    return model
+    return history, model
