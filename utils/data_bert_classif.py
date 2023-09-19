@@ -63,9 +63,8 @@ def bert_classif():
     test_predictions = model.predict(test_inputs_tuple)
 
     # Calculate Hamming Loss for train and test separately
-    threshold = 0.5
-    train_hamming_loss = hamming_loss(train_labels, (train_predictions > threshold))
-    test_hamming_loss = hamming_loss(test_labels, (test_predictions > threshold))
+    train_hamming_loss = hamming_loss(train_labels, train_predictions)
+    test_hamming_loss = hamming_loss(test_labels, test_predictions)
 
     print("Train Hamming Loss:", train_hamming_loss)
     print("Test Hamming Loss:", test_hamming_loss)

@@ -1,5 +1,6 @@
 from utils.data_cleaning import cleaning_data
 from utils.data_preproc import cleaning_table, cleaning_text
+
 from utils.data_classif_cleaning import classif_cleaning
 import pandas as pd
 

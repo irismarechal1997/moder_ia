@@ -12,8 +12,22 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 def bert_model_1(processed=False):
 
+<<<<<<< HEAD
+    filepath="weights-bert.h5"
+    checkpoint_callback = ModelCheckpoint(
+    filepath=filepath,  # Specify the path to save the checkpoint file
+    save_best_only=True,
+    save_weights_only=True,# Save only the best model (based on validation loss)
+    monitor='val_loss',  # Metric to monitor for saving the best model
+    mode='min',  # In this case, we're monitoring for the minimum validation loss
+    verbose=1)  # Display progress while saving)
+
+    #quick cleaning
+    data=pd.read_csv('data/processed_dataset_v1.csv')
+=======
     #quick cleaning
     data=pd.read_csv('data/processed_dataset_v1.csv', nrows=10000)
+>>>>>>> master
     data['text_processed'] = data['text_processed'].astype(str)
     data['text_processed'] = data['text_processed'].str.strip()
 
