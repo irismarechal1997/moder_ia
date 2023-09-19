@@ -4,7 +4,7 @@ from utils.registry import save_model, load_model
 from utils.ml_baseline import baseline_model
 from utils.dl import GRU_model, LSTM_model, Conv1D_model
 from utils.bert_binary import  bert_model_1
-from utils.classif_model import classif_cnn_model, classif_GRU_model
+from utils.classif_model import classif_cnn_model, classif_GRU_model, full_model_classif
 from utils.data_bert_classif import bert_classif
 
 ### Baseline_model
@@ -106,7 +106,7 @@ def pred_DL(X_pred: str = None, model_name=any) -> str:
 
 ### Classification models
 
-def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_classif
+def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_classif, full_model_classif
 
     if model_name == "GRU_classif":
         model = classif_GRU_model()
@@ -117,6 +117,12 @@ def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_cl
         model = classif_cnn_model()
         save_model(model, "CNN_classif")
         print(f"✅ Model successfully saved locally")
+
+    if model_name == "full_model_classif":
+        model = full_model_classif()
+        save_model(model, "full_model_classif")
+        print(f"✅ Model successfully saved locally")
+
 
     if model_name == "bert_classif":
         model = bert_classif()
@@ -137,6 +143,10 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
 
     if model_name == "CNN_classif":
         model = load_model("CNN_classif")
+
+    if model_name == "full_model_classif":
+        model = load_model("full_model_classif")
+
 
     X=[X_pred]
     y_pred = model.predict(X)
@@ -159,5 +169,5 @@ if __name__ == "__main__":
     # model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
     # train_DL_model(model_name,processed=False)
 
-    model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif : "))
+    model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
     train_classif_model(model_name)
