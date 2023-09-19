@@ -12,3 +12,4 @@ nltk
 TensorFlow
 transformers
 torch torch vision
+angdetect
