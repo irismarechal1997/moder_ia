@@ -145,14 +145,14 @@ def classif_cnn_model():
     return model
 
 
-def full_model_classif():
 
-    labelled_data = pd.read_csv("/home/mariannettrd/code/irismarechal1997/moder_ia/data/labelling_dataset_v1.csv")
+def full_model_classif():
+    labelled_data = pd.read_csv("data/"+"labelling_dataset_v1.csv")
     label = np.zeros(56515, dtype=np.int8 )
     list_1 = label.tolist()
     labelled_data.insert(1,"non-offensive",list_1)
 
-    df = pd.read_csv("/home/mariannettrd/code/irismarechal1997/moder_ia/data/processed_dataset_v1.csv")
+    df = pd.read_csv("data/"+"processed_dataset_v1.csv")
 
 
     #select number of tweets
@@ -168,17 +168,14 @@ def full_model_classif():
     label = np.zeros(number_rows, dtype=np.int8 )
     list_2 = label.tolist()
 
-    # Create a new DataFrame based on sample_df
-    new_df = sample_df[selected_features].copy()
-
     # Define the columns you want to insert
     columns= ['homophobia', 'transphobia', 'misogyny', 'xenophobia', 'religion', 'racism', 'non-offensive']
 
     # Iterate through the columns and insert them into new_df
     for col in columns:
         new_df.insert(1, col, list_2)
-        new_df["non-offensive"]=1
-        new_df.drop(columns="offensive", inplace = True)
+    new_df["non-offensive"]=1
+    new_df.drop(columns="offensive", inplace = True)
 
     data_set= pd.concat([labelled_data, new_df])
 
