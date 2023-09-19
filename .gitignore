@@ -4,3 +4,4 @@ raw_data/
 moder_ia.egg-info/
 utils/__pycache__/
 notebook/__pycache__/
+transformers/
