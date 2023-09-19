@@ -12,7 +12,6 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 def bert_model_1(processed=False):
 
-<<<<<<< HEAD
     filepath="weights-bert.h5"
     checkpoint_callback = ModelCheckpoint(
     filepath=filepath,  # Specify the path to save the checkpoint file
@@ -24,10 +23,6 @@ def bert_model_1(processed=False):
 
     #quick cleaning
     data=pd.read_csv('data/processed_dataset_v1.csv')
-=======
-    #quick cleaning
-    data=pd.read_csv('data/processed_dataset_v1.csv', nrows=10000)
->>>>>>> master
     data['text_processed'] = data['text_processed'].astype(str)
     data['text_processed'] = data['text_processed'].str.strip()
 
