@@ -1,10 +1,11 @@
-
 ## Import
 import pandas as pd
 from utils.registry import save_model, load_model
 from utils.ml_baseline import baseline_model
 from utils.dl import GRU_model, LSTM_model, Conv1D_model
 from utils.bert_binary import  bert_model_1
+from utils.classif_model import classif_cnn_model, classif_GRU_model, full_model_classif
+from utils.data_bert_classif import bert_classif
 
 ### Baseline_model
 
@@ -78,7 +79,7 @@ def train_DL_model(model_name, processed=False): ### select Conv1D, or GRU, or L
 
     return model
 
-### Predict with  DeepL models
+### Predict with DeepL models
 
 def pred_DL(X_pred: str = None, model_name=any) -> str:
     """
@@ -103,6 +104,60 @@ def pred_DL(X_pred: str = None, model_name=any) -> str:
     return y_pred
 
 
+### Classification models
+
+def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_classif, full_model_classif
+
+    if model_name == "GRU_classif":
+        model = classif_GRU_model()
+        save_model(model, "GRU_classif")
+        print(f"✅ Model successfully saved locally")
+
+    if model_name == "CNN_classif":
+        model = classif_cnn_model()
+        save_model(model, "CNN_classif")
+        print(f"✅ Model successfully saved locally")
+
+    if model_name == "full_model_classif":
+        model = full_model_classif()
+        save_model(model, "full_model_classif")
+        print(f"✅ Model successfully saved locally")
+
+
+    if model_name == "bert_classif":
+        model = bert_classif()
+        save_model(model, "bert_classif")
+        print(f"✅ Model successfully saved locally")
+
+    return model
+
+def pred_classif_model(X_pred: str = None, model_name=any) -> str:
+    """
+    Make a prediction using the latest trained model
+    """
+    if model_name == "GRU_classif":
+        model = load_model("GRU_classif")
+
+    if model_name == "bert_classif":
+        model = load_model("bert_classif")
+
+    if model_name == "CNN_classif":
+        model = load_model("CNN_classif")
+
+    if model_name == "full_model_classif":
+        model = load_model("full_model_classif")
+
+
+    X=[X_pred]
+    y_pred = model.predict(X)
+
+    if y_pred == 1:
+        print("Your tweet is offensive")
+    else:
+        print("✅ Your tweet is not offensive")
+    return y_pred
+
+
 if __name__ == "__main__":
     # while True:
     #     X_pred = str(input("Enter a tweet: "))
@@ -111,5 +166,8 @@ if __name__ == "__main__":
     #     train_DL_model(model_name, processed=False)
     #     pred_DL(model_name, X_pred)
 
-    model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
-    train_DL_model(model_name,processed=False)
+    # model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
+    # train_DL_model(model_name,processed=False)
+
+    model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
+    train_classif_model(model_name)

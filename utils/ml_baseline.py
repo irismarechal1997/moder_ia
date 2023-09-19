@@ -36,7 +36,7 @@ def crossval_baseline_model(processed=True):
 
     average_precision = round(cv_results["test_precision"].mean(),2)
     average_recall = round(cv_results["test_recall"].mean(),2)
-    average_accuracy = round(cv_results["test_accuracy"].mean(),2)
+    average_accuracy = round(cv_results["git test_accuracy"].mean(),2)
 
     return f'precision score is {average_precision}, recall score is {average_recall}, accuracy score is {average_accuracy}'
 

@@ -1,5 +1,7 @@
 from utils.data_cleaning import cleaning_data
 from utils.data_preproc import cleaning_table, cleaning_text
+
+from utils.data_classif_cleaning import classif_cleaning
 import pandas as pd
 
 def data_processed(parent=True):
@@ -29,5 +31,15 @@ def data_processed(parent=True):
     print("✅ preprocess() done, processed_dataset generated \n")
     return data_processed
 
+
+def data_labels_processed():
+    data=pd.read_csv('raw_data/measuring_hate_speech.csv')
+    print("✅ preprocess() done,label_dataset generated \n")
+    label_dataset = classif_cleaning(data)
+    label_dataset.to_csv("data/labelling_dataset_v1.csv", index= False) # generate a file
+    return label_dataset
+
+
+
 if __name__ == "__main__": ## dire quelle fonction
-    data_processed(parent=True)
+    data_labels_processed()

@@ -11,5 +11,5 @@ jupyter
 nltk
 TensorFlow
 transformers
-torch torch vision
-angdetect
+torch
+langdetect
