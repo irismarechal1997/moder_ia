@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 
 
 def bert_classif():
-    data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv").loc[1:10,:]
+    data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv")
     texts = data_extracted['text_processed']
     labels = data_extracted.drop(['text','text_processed'],axis=1)
 
