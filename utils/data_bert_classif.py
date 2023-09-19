@@ -24,9 +24,9 @@ def bert_classif():
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
-    train_inputs_tokenized=tokenizer(train_inputs, add_special_tokens=True, truncation=True, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
+    train_inputs_tokenized=tokenizer(train_inputs, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
 
-    test_inputs_tokenized=tokenizer(test_inputs, add_special_tokens=True, truncation=True, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
+    test_inputs_tokenized=tokenizer(test_inputs, max_length=200, padding='max_length', return_attention_mask=True, return_tensors='tf')
 
     train_inputs_tuple = (train_inputs_tokenized['input_ids'], train_inputs_tokenized['token_type_ids'], train_inputs_tokenized['attention_mask'])
     test_inputs_tuple = (test_inputs_tokenized['input_ids'], test_inputs_tokenized['token_type_ids'], test_inputs_tokenized['attention_mask'])
@@ -41,6 +41,9 @@ def bert_classif():
     # Step 2: Model Building
     model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=6)
 
+    for layer in model.layers[:-2]:
+        layer.trainable=False
+
     optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
     loss = tf.keras.losses.BinaryCrossentropy()
 
@@ -51,9 +54,10 @@ def bert_classif():
     # fitting
     history = model.fit(
     train_inputs_tuple,train_labels,
-    epochs=20,
-    batch_size=32)
+    epochs=5,
+    batch_size=128)
 
+    print(model.summary())
 
     train_predictions = model.predict(train_inputs_tuple)
     test_predictions = model.predict(test_inputs_tuple)
