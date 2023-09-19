@@ -13,3 +13,4 @@ TensorFlow
 transformers
 torch
 langdetect
+streamlit
