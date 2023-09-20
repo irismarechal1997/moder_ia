@@ -22,3 +22,7 @@ uvicorn
 # tests
 httpx
 pytest-asyncio
+
+
+streamlit
+
