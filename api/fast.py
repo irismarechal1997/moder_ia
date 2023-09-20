@@ -16,6 +16,10 @@ from keras.preprocessing.text import Tokenizer
 from transformers import BertConfig, AutoTokenizer, TFBertModel, BertTokenizer, TFBertForSequenceClassification, BertModel
 import tensorflow as tf
 
+import os
+
+import openai
+
 
 app = FastAPI()
 
@@ -66,18 +70,25 @@ def predict_binary(X_pred=str):
 
 #Deuxième fonction
 
+tweet="black people should die"
+classification="racist"
+def generate_fight_tweet(tweet, classification):
+
+    openai.api_key = os.environ.get("API_KEY")
+    content_of_the_request = f"We have received an offensive tweet. This tweet can be classified as {classification}. Please find here the tweet '{tweet}'. Could you please generate a response to this tweet by explaining that this tweet is {classification} and recall the potential penalties incurred (legally but also in terms of banning on the tweeter platform). Please generate a response in the form of a tweet of max 280 characters and directly generate the quoted response without anything else."
+    response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=[{'role':'user','content': content_of_the_request}])
+    print(response.choices[0].message.content)
+
 
 
 
 
 @app.get("/")
 def root():
-    # $CHA_BEGIN
     return dict(greeting="Hello")
-    # $CHA_END
 
 
 
-# if __name__ == "__main__":
-#     X = str(input("Enter a tweet: "))
-#     predict_binary(X_pred=X)
+if __name__ == "__main__":
+     tweet = str(input("Enter a tweet: "))
+     generate_fight_tweet(tweet, "racist")
