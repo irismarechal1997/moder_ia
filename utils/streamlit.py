@@ -45,11 +45,14 @@ def page_one():
             # If the API response is "the tweet is offensive," show the "Learn more" button
             if response == "the tweet is offensive":
                 st.button("Learn more on my tweet")
+    return response
 
 # Page 2: Learn more on my tweet
 def page_two():
+    if page_one == "the tweet is offensive"
     set_background()
     st.title("Learn more on my tweet")
+
 
 # Simulate an API call to check tweet offensiveness
 def check_tweet_offensiveness(tweet):
