@@ -1,19 +1,22 @@
 import streamlit as st
+from PIL import Image
+from IPython.display import display
 
 # Modification des paramètres visuels du site
 primaryColor = "#F63366"
 textColor = "#262730"
 font = "sans serif"
+image_path = "../data/Background_site.png"
 
 # Ajout d'une photo dans le fond du site
 def set_background():
     st.markdown(
         f"""
         <style>
-        .stApp {
-            background-image: url("irismarechal1997/moder_ia/data/Background_site.png");
+        .stApp {{
+            background-image: url("{image_path}");
             background-size: cover;
-        }
+        }}
         </style>
         """,
         unsafe_allow_html=True,
