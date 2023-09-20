@@ -1,6 +1,11 @@
+pandas
+numpy
 tensorflow
-
+scikit-learn
+google-auth
+google-cloud-storage
+nltk
+transformers
 # API
 fastapi
-pytz
 uvicorn

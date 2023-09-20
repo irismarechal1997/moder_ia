@@ -34,7 +34,7 @@ app.add_middleware(
 
 
 @app.get("/predict")
-def predict_binary(X_pred="black people should die"):
+def predict_binary(X_pred=str):
 
     #preprocessing
     X_pred = str(X_pred)
