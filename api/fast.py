@@ -67,6 +67,9 @@ def predict_binary(X_pred="black people should die"):
 #Deuxième fonction
 
 
+
+
+
 @app.get("/")
 def root():
     # $CHA_BEGIN
