@@ -16,6 +16,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import EarlyStopping
 
 
+
 def LSTM_model(processed=True):
 
     data_processed = pd.read_csv("data/"+"processed_dataset_v1.csv")

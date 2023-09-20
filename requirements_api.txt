@@ -1,0 +1,6 @@
+tensorflow
+
+# API
+fastapi
+pytz
+uvicorn

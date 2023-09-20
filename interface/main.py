@@ -6,10 +6,12 @@ from utils.dl import GRU_model, LSTM_model, Conv1D_model
 from utils.bert_binary import  bert_model_1
 from utils.classif_model import classif_cnn_model, classif_GRU_model, full_model_classif
 from utils.data_bert_classif import bert_classif
+import pickle
+import tensorflow as tf
 
 ### Baseline_model
 
-data_processed = pd.read_csv("data/processed_dataset_v1.csv") # assign variable
+data_processed = pd.read_csv("data/"+"processed_dataset_v1.csv") # assign variable
 # train_baseline_model
 
 def train_baseline_model(processed=False):
@@ -94,8 +96,14 @@ def pred_DL(X_pred: str = None, model_name=any) -> str:
     if model_name == "LSTM":
         model = load_model("LSTM")
 
+    if model_name == "bert_binary":
+        model = tf.keras.models.load_model('bert_binary.h5')
+
+    print("model loaded")
+
     X=[X_pred]
     y_pred = model.predict(X)
+    print("prediction done")
 
     if y_pred == 1:
         print("Your tweet is offensive")
@@ -125,11 +133,15 @@ def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_cl
 
 
     if model_name == "bert_classif":
-        model = bert_classif()
-        save_model(model, "bert_classif")
+        history, model = bert_classif()
+        save_model(model, "bert_classif_VM")
+        pickle.dump(history, open("history_bert_classif_vm.pickle", "wb"))  # save it into a file named save.p
         print(f"✅ Model successfully saved locally")
 
     return model
+
+
+
 
 def pred_classif_model(X_pred: str = None, model_name=any) -> str:
     """
@@ -147,7 +159,6 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
     if model_name == "full_model_classif":
         model = load_model("full_model_classif")
 
-
     X=[X_pred]
     y_pred = model.predict(X)
 
@@ -159,15 +170,17 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
 
 
 if __name__ == "__main__":
-    # while True:
-    #     X_pred = str(input("Enter a tweet: "))
-    #     model_name = str(input("Enter model name between LSTM, GRU and Conv1D : "))
-    #     pred_baseline(X_pred)
-    #     train_DL_model(model_name, processed=False)
-    #     pred_DL(model_name, X_pred)
+    while True:
+        X_pred = str(input("Enter a tweet: "))
+        model_name = str(input("Enter model name between LSTM, bert_binary, GRU and Conv1D : "))
+        pred_DL(model_name=model_name, X_pred=X_pred)
+
+        # # pred_baseline(X_pred)
+        # train_DL_model(model_name, processed=False)
+
 
     # model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
     # train_DL_model(model_name,processed=False)
 
-    model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
-    train_classif_model(model_name)
+    # model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
+    # train_classif_model(model_name)
