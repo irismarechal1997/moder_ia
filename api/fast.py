@@ -64,14 +64,13 @@ def predict_binary(X_pred=str):
     else:
         prediction = "✅ non-offensive tweet"
 
-    print(f'type of tweet: {prediction}')
+    print(prediction)
 
     return {"type of tweet": prediction}
 
 #Deuxième fonction
 
-tweet="black people should die"
-classification="racist"
+
 def generate_fight_tweet(tweet, classification):
 
     openai.api_key = os.environ.get("API_KEY")
@@ -86,9 +85,3 @@ def generate_fight_tweet(tweet, classification):
 @app.get("/")
 def root():
     return dict(greeting="Hello")
-
-
-
-if __name__ == "__main__":
-     tweet = str(input("Enter a tweet: "))
-     generate_fight_tweet(tweet, "racist")

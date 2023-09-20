@@ -1,12 +1,15 @@
 import streamlit as st
 from PIL import Image
 from IPython.display import display
+import requests
+from api.fast import predict_binary
 
 # Modification des paramètres visuels du site
 primaryColor = "#F63366"
 textColor = "#262730"
 font = "sans serif"
 image_path = "../data/Background_site.png"
+
 
 # Ajout d'une photo dans le fond du site
 def set_background():
@@ -39,19 +42,19 @@ def page_one():
     if st.button("Check Tweet"):
         if tweet:
             # Replace this with your API call to check for offensiveness
-            response = check_tweet_offensiveness(tweet)
+            response = predict_binary(tweet) #nom de la requête API pour le premier modèle
             st.write("API Response:", response)
 
             # If the API response is "the tweet is offensive," show the "Learn more" button
             if response == "the tweet is offensive":
                 st.button("Learn more on my tweet")
-    return response
+            return response
 
 # Page 2: Learn more on my tweet
 def page_two():
-    if page_one == "the tweet is offensive"
-    set_background()
-    st.title("Learn more on my tweet")
+    if page_one == "the tweet is offensive":
+        set_background()
+        st.title("Learn more on my tweet")
 
 
 # Simulate an API call to check tweet offensiveness
