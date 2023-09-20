@@ -13,4 +13,16 @@ TensorFlow
 transformers
 torch
 langdetect
+
+# API
+fastapi
+pytz
+uvicorn
+
+# tests
+httpx
+pytest-asyncio
+
+
 streamlit
+
