@@ -6,6 +6,7 @@ from utils.dl import GRU_model, LSTM_model, Conv1D_model
 from utils.bert_binary import  bert_model_1
 from utils.classif_model import classif_cnn_model, classif_GRU_model, full_model_classif
 from utils.data_bert_classif import bert_classif
+import pickle
 import tensorflow as tf
 
 ### Baseline_model
@@ -132,11 +133,15 @@ def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_cl
 
 
     if model_name == "bert_classif":
-        model = bert_classif()
-        save_model(model, "bert_classif")
+        history, model = bert_classif()
+        save_model(model, "bert_classif_VM")
+        pickle.dump(history, open("history_bert_classif_vm.pickle", "wb"))  # save it into a file named save.p
         print(f"✅ Model successfully saved locally")
 
     return model
+
+
+
 
 def pred_classif_model(X_pred: str = None, model_name=any) -> str:
     """
