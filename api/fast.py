@@ -14,6 +14,7 @@ from transformers import  BertTokenizer
 from tensorflow.keras.preprocessing.text import Tokenizer
 from keras.preprocessing.text import Tokenizer
 from transformers import BertConfig, AutoTokenizer, TFBertModel, BertTokenizer, TFBertForSequenceClassification, BertModel
+import tensorflow as tf
 
 
 app = FastAPI()
@@ -27,46 +28,56 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
     )
 
-config = BertConfig.from_pretrained('prajjwal1/bert-mini')
-model = TFBertForSequenceClassification(config=config)
-model.build()
-model.load_weights("weights-bert.h5")
-print("✅ 0. model loaded")
 
 # $WIPE_END
 
+
+
 @app.get("/predict")
-def predict_binary(X_pred: str):
+def predict_binary(X_pred="black people should die"):
 
     #preprocessing
     X_pred = str(X_pred)
     X_pred = cleaning_text(X_pred)
-    print("✅ 1. data cleaned")
 
     #tokenizer_bert
     tokenizer_mini = BertTokenizer.from_pretrained('prajjwal1/bert-mini')
     X_pred = tokenizer_mini(X_pred, return_tensors='tf', padding=True, truncation=True, max_length=512)
-    print("✅ 2. data tokenized")
+    X_pred = dict(X_pred)
 
-    model = model
+    config = BertConfig.from_pretrained('prajjwal1/bert-mini')
+    model = TFBertForSequenceClassification(config=config)
+    model.build()
+    model.load_weights("bert_binary.h5")
 
     y_pred = model.predict(X_pred)
-    print("✅ 3. prediction made")
-    print(y_pred)
 
-    if y_pred == 1:
-        prediction = "❌ offensive_tweet"
+    probabilities = tf.sigmoid(y_pred[0][0])
+    print(probabilities)
+
+    if probabilities[0] < 0.5:
+        prediction = "❌ offensive tweet"
     else:
-        prediction = "✅ non-offensive_tweet"
+        prediction = "✅ non-offensive tweet"
 
     print(f'type of tweet: {prediction}')
 
     return {"type of tweet": prediction}
 
+#Deuxième fonction
 
 
-# @app.get("/")
-# def root():
-#     # $CHA_BEGIN
-#     return dict(greeting="Hello")
-#     # $CHA_END
+
+
+
+@app.get("/")
+def root():
+    # $CHA_BEGIN
+    return dict(greeting="Hello")
+    # $CHA_END
+
+
+
+# if __name__ == "__main__":
+#     X = str(input("Enter a tweet: "))
+#     predict_binary(X_pred=X)
