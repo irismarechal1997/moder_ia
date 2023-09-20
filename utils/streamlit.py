@@ -8,10 +8,10 @@ font = "sans serif"
 # Ajout d'une photo dans le fond du site
 def set_background():
     st.markdown(
-        """
+        f"""
         <style>
         .stApp {
-            background-image: url("../data/Background_site.png");
+            background-image: url("irismarechal1997/moder_ia/data/Background_site.png");
             background-size: cover;
         }
         </style>
@@ -22,7 +22,7 @@ def set_background():
 # Page 1: Fighting against online hate speech
 def page_one():
     set_background()
-    st.title("Fighting against online hate speech")
+    st.title("Fighting online hate-speech")
 
     # Add a text input field for entering a tweet
     tweet = st.text_area("Write down your tweet")
