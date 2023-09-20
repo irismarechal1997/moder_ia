@@ -14,7 +14,7 @@ def set_background():
         f"""
         <style>
         .stApp {{
-            background-image: url("{image_path}");
+            background-image: url({image_path});
             background-size: cover;
         }}
         </style>
