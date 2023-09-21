@@ -20,16 +20,14 @@ from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.svm import LinearSVC
 import random
 
-
-
-import numpy as np
-import pandas as pd
+import joblib
 
 from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, hamming_loss
+
 
 
 
@@ -104,13 +102,16 @@ def classif_cnn_model():
     tk.fit_on_texts(X_train)
     vocab_size = len(tk.word_index)
 
+    joblib.dump(tk, "tokenizer.joblib")
+
     # We apply the tokenization to the train and test set
     X_train_token = tk.texts_to_sequences(X_train)
     X_test_token = tk.texts_to_sequences(X_test)
 
-    X_train_pad = pad_sequences(X_train_token, dtype='float32', padding='post')
-    X_test_pad = pad_sequences(X_test_token, dtype='float32', padding='post')
+    X_train_pad = pad_sequences(X_train_token, dtype='float32', padding='post', maxlen = 180)
+    X_test_pad = pad_sequences(X_test_token, dtype='float32', padding='post', maxlen = 180)
 
+    breakpoint()
     # Size of your embedding space = size of the vector representing each word
     embedding_size = 50
 
@@ -121,7 +122,7 @@ def classif_cnn_model():
     model.add(layers.Conv1D(filters=32, kernel_size=3, padding='same', activation='relu'))
     model.add(layers.MaxPooling1D(pool_size=2))
     model.add(layers.LSTM(100))
-    model.add(layers.Dense(6, activation='sigmoid'))
+    model.add(layers.Dense(6, activation='softmax')) #changer et faire run  à novueau
 
     # Students will be ending their code here
 
@@ -210,7 +211,7 @@ def full_model_classif():
 
     model.add(layers.GRU(20, return_sequences=True, activation="tanh"))
     model.add(layers.GRU(20, activation="tanh"))
-    model.add(layers.Dense(7, activation="sigmoid"))
+    model.add(layers.Dense(7, activation="softmax"))
     model.summary()
 
     model.compile(loss='binary_crossentropy',
@@ -230,3 +231,8 @@ def full_model_classif():
     print(f'The accuracy evaluated on the test set is of {res[1]*100:.3f}%')
 
     return model
+
+
+
+if __name__ == "__main__":
+    classif_cnn_model()

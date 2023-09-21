@@ -1,5 +1,6 @@
 #import general packages
 import pandas as pd
+import numpy as np
 
 #import functions
 from utils.registry import load_model
@@ -15,10 +16,11 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from keras.preprocessing.text import Tokenizer
 from transformers import BertConfig, AutoTokenizer, TFBertModel, BertTokenizer, TFBertForSequenceClassification, BertModel
 import tensorflow as tf
-
+import joblib
 import os
 
 import openai
+from tensorflow.keras.utils import pad_sequences
 
 
 app = FastAPI()
@@ -68,7 +70,30 @@ def predict_binary(X_pred=str):
 
     return {"type of tweet": prediction}
 
-#Deuxième fonction
+
+@app.get("/predict")
+def predict_classif(tweet_a_predire):
+
+    #preprocessing
+    data = pd.DataFrame({"text":[tweet_a_predire]})
+    data["text"] = data["text"].apply(cleaning_text)
+
+    #tokenizer_bert
+    X_pred=data["text"]
+    tk = joblib.load("tokenizer.joblib")
+    X_pred_tok = tk.texts_to_sequences(X_pred)
+    X_pred_pad = pad_sequences(X_pred_tok, dtype='float32', padding='post', maxlen = 180)
+
+    model = load_model("CNN_classif")
+    y_pred = model.predict(X_pred_pad)
+
+    probabilities = np.array(y_pred)
+    df=pd.DataFrame(probabilities, columns=['Racist tweet','Religious Hate','Xenophobia','Misogyny','Transphobia','Homophobia'])
+
+    label = df.idxmax(axis=1).iloc[0]
+
+    return {"label": label}
+
 
 
 def generate_fight_tweet(tweet, classification):
@@ -80,8 +105,12 @@ def generate_fight_tweet(tweet, classification):
 
 
 
-
-
 @app.get("/")
 def root():
     return dict(greeting="Hello")
+
+
+if __name__ == "__main__":
+
+    tweet_a_predire = str(input("Enter a tweet: "))
+    predict_classif(tweet_a_predire=tweet_a_predire)

@@ -155,6 +155,7 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
 
     if model_name == "CNN_classif":
         model = load_model("CNN_classif")
+        breakpoint()
 
     if model_name == "full_model_classif":
         model = load_model("full_model_classif")
@@ -170,10 +171,10 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
 
 
 if __name__ == "__main__":
-    while True:
-        X_pred = str(input("Enter a tweet: "))
-        model_name = str(input("Enter model name between LSTM, bert_binary, GRU and Conv1D : "))
-        pred_DL(model_name=model_name, X_pred=X_pred)
+    # while True:
+    #     X_pred = str(input("Enter a tweet: "))
+    #     model_name = str(input("Enter model name between LSTM, bert_binary, GRU and Conv1D : "))
+    #     pred_DL(model_name=model_name, X_pred=X_pred)
 
         # # pred_baseline(X_pred)
         # train_DL_model(model_name, processed=False)
@@ -182,5 +183,5 @@ if __name__ == "__main__":
     # model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
     # train_DL_model(model_name,processed=False)
 
-    # model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
-    # train_classif_model(model_name)
+    model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
+    pred_classif_model(model_name=model_name)
