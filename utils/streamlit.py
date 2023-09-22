@@ -2,8 +2,10 @@ import streamlit as st
 from PIL import Image
 from IPython.display import display
 import requests
-from api.fast import predict_binary, generate_fight_tweet
+from api.fast import predict_binary, generate_fight_tweet, predict_classif
 import base64
+import os
+import openai
 
 
 #### SET CSS and main functions
@@ -50,7 +52,7 @@ circle_css = """
 #########################################
 
 # Part 1 : Presentation of the project
-st.title("Let's Fight Online Hate-Speech")
+st.title("✊ Let's Fight Online Hate-Speech ✊")
 st.markdown(
     "We are 3 students from Le Wagon learning data science, machine learning and deep learning.As part of our final project, we decided to create a small program allowing anyone to enter a tweet, get infromation on the level of offensiveness of the tweet, and generate automatically an appropriate tweet response.")
 
@@ -66,7 +68,7 @@ if st.button(presentation_button_label):
 
 
 # Part 2: Tweet Analysis
-st.header("Analyze a Tweet")
+st.header("1️⃣ Analyze a Tweet")
 tweet = st.text_area("Write down your tweet")
 
 if tweet:
@@ -77,37 +79,49 @@ if tweet:
 if st.button("Check Tweet"):
     if tweet:
         # Replace this with your API call to check for offensiveness
-        response = predict_binary(tweet) #nom de la requête API pour le premier modèle
-        st.write("API Response:", response)
+        response = predict_binary(tweet)  # Replace with your API call
+        st.write("API Response:", response["type of tweet"])
 
         # If the API response is "the tweet is offensive," show the "Learn more" button
         if response == "the tweet is offensive":
-            st.button("Learn more on my tweet")
-            st.write("<a href='#tweet-description'>Scroll down to learn more about the tweet.</a>",unsafe_allow_html=True)
-    return response
+            if st.button("Learn more on my tweet"):
+                # Scroll to Part 3
+                st.write(
+                    "<a href='#tweet-description'>Scroll down to learn more about the tweet.</a>",
+                    unsafe_allow_html=True,
+                )
+    else:
+        st.write("Please enter a tweet to check.")
 
 
 ############################################
 
 # Part 3: Tweet Description
-st.header("Tweet Description")
+st.header("2️⃣ Tweet Description")
 
 if st.button("Analyze Tweet"):
 
     # Add code here to call your second API to describe the tweet
-
-    description_result = "This tweet has been analyzed as 'racist'"  # Replace with actual result
+    response_class = predict_classif(tweet)
+    description_result = f"This tweet has been analyzed as a {response_class['label']}"  # Replace with actual result
     st.write(description_result)
 
-
+()
 ############################################
 # Part 4: Generate Response to Tweet
-st.header("Generate Response to Tweet")
+st.header("3️⃣ Generate Response to Tweet")
 if st.button("Generate Response to Tweet"):
     # Add code here to call your third API to generate a response
-    response = generate_fight_tweet(tweet, 'racist')
-    response_result = response  # Replace with actual result
-    st.write(response_result)
+    response_class = predict_classif(tweet)
+
+    openai.api_key = os.environ.get("API_KEY")
+    content_of_the_request = f"We have received an offensive tweet. This tweet can be classified as {response_class['label']}. Please find here the tweet '{tweet}'. Could you please generate a response to this tweet by explaining that this tweet is {response_class['label']} and recall the potential penalties incurred (legally but also in terms of banning on the tweeter platform). Please generate a response in the form of a tweet of max 280 characters and directly generate the quoted response without anything else."
+    response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=[{'role':'user','content': content_of_the_request}])
+    st.write(response.choices[0].message.content)
+    #response = generate_fight_tweet(tweet, response_class['label'])
+    #st.write(generate_fight_tweet(tweet, response_class['label']))
+    #response_result = response  # Replace with actual result
+    #st.write(response_result)
 
 
 ###############################################
@@ -115,31 +129,21 @@ if st.button("Generate Response to Tweet"):
 st.title("Who are we ? ")
 st.markdown("Meet the team behind the project:")
 
-# Add pictures and descriptions of team members
-with st.beta_container():
-    st.image("image1.jpg", caption="Team Member 1", use_column_width=True, output_format="auto")
-    st.write("Team Member 1 - Description")
-    st.markdown(f'<div style="{circle_css}"><img src="image1.jpg" width="100" height="100"></div>', unsafe_allow_html=True)
 
-with st.beta_container():
-    st.image("image2.jpg", caption="Team Member 2", use_column_width=True, output_format="auto")
-    st.write("Team Member 2 - Description")
-    st.markdown(f'<div style="{circle_css}"><img src="image2.jpg" width="100" height="100"></div>', unsafe_allow_html=True)
+# Define circle_css for circular images (if you have defined it)
 
-with st.beta_container():
-    st.image("image3.jpg", caption="Team Member 3", use_column_width=True, output_format="auto")
-    st.write("Team Member 3 - Description")
-    st.markdown(f'<div style="{circle_css}"><img src="image3.jpg" width="100" height="100"></div>', unsafe_allow_html=True)
+# Create a layout for each team member
+def team_member(image_path, name, description):
+    with st.container():
+        st.image(image_path, caption=name, use_column_width=True, output_format="auto")
+        st.write(description)
+        st.markdown(f'<div style="border-radius: 50%; overflow: hidden; width: 100px; height: 100px;"><img src="{image_path}" width="100" height="100"></div>', unsafe_allow_html=True)
 
-# Main function to run the Streamlit app
-#def main():
-    #st.sidebar.title("Navigation")
-    #page = st.sidebar.selectbox("Go to:", ["Home", "Learn More"])
+# Team Member 1
+team_member("IMG_0606.png", "Marianne", "Team Member 1 - Description")
 
-    #if page == "Home":
-        #page_one()
-    #elif page == "Learn More":
-        #page_two()
+# Team Member 2
+team_member("IMG_0607.png", "Team Member 2", "Team Member 2 - Description")
 
-#if __name__ == "__main__":
-    #main()
+# Team Member 3
+team_member("PP_Iris.png", "Team Member 3", "Team Member 3 - Description")

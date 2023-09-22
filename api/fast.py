@@ -78,6 +78,7 @@ def predict_classif(tweet_a_predire):
     data = pd.DataFrame({"text":[tweet_a_predire]})
     data["text"] = data["text"].apply(cleaning_text)
 
+
     #tokenizer_bert
     X_pred=data["text"]
     tk = joblib.load("tokenizer.joblib")
@@ -102,6 +103,7 @@ def generate_fight_tweet(tweet, classification):
     content_of_the_request = f"We have received an offensive tweet. This tweet can be classified as {classification}. Please find here the tweet '{tweet}'. Could you please generate a response to this tweet by explaining that this tweet is {classification} and recall the potential penalties incurred (legally but also in terms of banning on the tweeter platform). Please generate a response in the form of a tweet of max 280 characters and directly generate the quoted response without anything else."
     response = openai.ChatCompletion.create(model='gpt-3.5-turbo', messages=[{'role':'user','content': content_of_the_request}])
     print(response.choices[0].message.content)
+    #print(response)
 
 
 
@@ -113,4 +115,5 @@ def root():
 if __name__ == "__main__":
 
     tweet_a_predire = str(input("Enter a tweet: "))
-    predict_classif(tweet_a_predire=tweet_a_predire)
+    label = predict_classif(tweet_a_predire=tweet_a_predire)['label']
+    generate_fight_tweet(tweet_a_predire, label)
