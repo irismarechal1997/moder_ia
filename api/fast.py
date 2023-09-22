@@ -92,6 +92,7 @@ def predict_classif(tweet_a_predire):
 
     label = df.idxmax(axis=1).iloc[0]
 
+    print(label)
     return {"label": label}
 
 
