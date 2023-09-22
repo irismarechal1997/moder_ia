@@ -6,10 +6,12 @@ from api.fast import predict_binary, generate_fight_tweet, predict_classif
 import base64
 import os
 import openai
+from PIL import Image
+import streamlit as st
+import streamlit.components.v1 as components
 
 
 #### SET CSS and main functions
-
 st.set_page_config(
     page_title="Let's fight online Hate-Speech",
     page_icon="✊",
@@ -25,11 +27,32 @@ colors = {
     "red": "#e74c3c",
 }
 
+st.markdown('<style>body {background-image: url("Background_site.png"); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;}</style>', unsafe_allow_html=True)
+
+
+# Set a background image
+image_path = "Background_site.png"
+
+# Create a CSS rule to set the background image
+background_css = f"""
+<style>
+body {{
+    background-image: url('{image_path}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}}
+</style>
+"""
+
+# Inject the CSS rule into the page
+st.markdown(background_css, unsafe_allow_html=True)
+
 # Modification des paramètres visuels du site
 primaryColor = "#F63366"
 textColor = "#262730"
 font = "sans serif"
-image_path = "../data/Background_site.png"
+
 
 # Function to encode a file to base64
 def get_base64_of_bin_file(bin_file):
@@ -37,22 +60,10 @@ def get_base64_of_bin_file(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-# CSS for circular frames
-circle_css = """
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 150px;
-    height: 150px;
-    background-color: white;
-    border-radius: 50%;
-    padding: 10px;
-"""
-
 #########################################
 
 # Part 1 : Presentation of the project
-st.title("✊ Let's Fight Online Hate-Speech ✊")
+st.title("✊ Let's Fight Online Hate-Speech")
 st.markdown(
     "We are 3 students from Le Wagon learning data science, machine learning and deep learning.As part of our final project, we decided to create a small program allowing anyone to enter a tweet, get infromation on the level of offensiveness of the tweet, and generate automatically an appropriate tweet response.")
 
@@ -130,20 +141,22 @@ st.title("Who are we ? ")
 st.markdown("Meet the team behind the project:")
 
 
-# Define circle_css for circular images (if you have defined it)
-
 # Create a layout for each team member
 def team_member(image_path, name, description):
-    with st.container():
-        st.image(image_path, caption=name, use_column_width=True, output_format="auto")
-        st.write(description)
-        st.markdown(f'<div style="border-radius: 50%; overflow: hidden; width: 100px; height: 100px;"><img src="{image_path}" width="100" height="100"></div>', unsafe_allow_html=True)
+    st.image(image_path, use_column_width='auto', caption=name)
+    st.markdown(f'<p style="text-align: center;">{name}</p>', unsafe_allow_html=True)
+
+# Create a row with three columns
+col1, col2, col3 = st.columns(3)
 
 # Team Member 1
-team_member("IMG_0606.png", "Marianne", "Team Member 1 - Description")
+with col1:
+    team_member("IMG_0606.png", "Marianne", "Team Member 1 - Description")
 
 # Team Member 2
-team_member("IMG_0607.png", "Team Member 2", "Team Member 2 - Description")
+with col2:
+    team_member("IMG_0607.png", "Team Member 2", "Team Member 2 - Description")
 
 # Team Member 3
-team_member("PP_Iris.png", "Team Member 3", "Team Member 3 - Description")
+with col3:
+    team_member("PP_Iris.png", "Team Member 3", "Team Member 3 - Description")
