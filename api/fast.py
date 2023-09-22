@@ -93,7 +93,12 @@ def predict_classif(tweet_a_predire):
 
     label = df.idxmax(axis=1).iloc[0]
 
+<<<<<<< Updated upstream
     print(label)
+=======
+    #breakpoint()
+
+>>>>>>> Stashed changes
     return {"label": label}
 
 
@@ -114,7 +119,5 @@ def root():
 
 
 if __name__ == "__main__":
-
-    tweet_a_predire = str(input("Enter a tweet: "))
-    label = predict_classif(tweet_a_predire=tweet_a_predire)['label']
-    generate_fight_tweet(tweet_a_predire, label)
+    print(predict_binary(X_pred="Gay are dumb"))
+    print(predict_classif("Gay are dumb"))
