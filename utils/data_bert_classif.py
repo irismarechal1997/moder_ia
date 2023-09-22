@@ -23,6 +23,16 @@ import matplotlib.pyplot as plt
 
 
 def bert_classif():
+
+    checkpoint_callback = ModelCheckpoint(
+    filepath= "../model/bert_classif_v2",  # Specify the path to save the checkpoint file
+    save_best_only=True,
+    save_weights_only=True,# Save only the best model (based on validation loss)
+    monitor='val_loss',  # Metric to monitor for saving the best model
+    mode='min',  # In this case, we're monitoring for the minimum validation loss
+    verbose=1)  # Display progress while saving)
+
+
     data_extracted = pd.read_csv("data/"+"labelling_dataset_v1.csv")
     texts = data_extracted['text_processed']
     labels = data_extracted.drop(['text','text_processed'],axis=1)
@@ -46,11 +56,6 @@ def bert_classif():
 
     unique_classes = set()
 
-    for label in labels:
-        unique_classes.update(label)
-
-    num_classes = len(unique_classes)
-
     # Step 2: Model Building
     model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=6)
 
@@ -61,7 +66,7 @@ def bert_classif():
 
 
     # Compile the model
-    model.compile(optimizer='adam', loss=loss, metrics=['accuracy', 'Recall', 'Precision' ])
+    model.compile(optimizer='adam', loss=loss, metrics=['accuracy'])
 
     # fitting
     history = model.fit(
