@@ -123,7 +123,7 @@ def train_classif_model(model_name): ### select bert_classif, GRU_classif,CNN_cl
 
     if model_name == "CNN_classif":
         model = classif_cnn_model()
-        save_model(model, "CNN_classif")
+        save_model(model, "CNN_classifv2")
         print(f"✅ Model successfully saved locally")
 
     if model_name == "full_model_classif":
@@ -155,7 +155,6 @@ def pred_classif_model(X_pred: str = None, model_name=any) -> str:
 
     if model_name == "CNN_classif":
         model = load_model("CNN_classif")
-        breakpoint()
 
     if model_name == "full_model_classif":
         model = load_model("full_model_classif")
@@ -180,8 +179,9 @@ if __name__ == "__main__":
         # train_DL_model(model_name, processed=False)
 
 
-    # model_name = str(input("Enter model name between LSTM, GRU and Conv1D, bert_binary : "))
-    # train_DL_model(model_name,processed=False)
-
     model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
-    pred_classif_model(model_name=model_name)
+    train_classif_model(model_name=model_name)
+
+    # X_pred = str(input("Enter a tweet: "))
+    # model_name = str(input("Enter model name between bert_classif, GRU_classif,CNN_classif, full_model_classif : "))
+    # pred_classif_model(model_name=model_name)
