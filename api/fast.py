@@ -39,7 +39,7 @@ app.add_middleware(
 
 
 
-@app.get("/predict")
+@app.get("/predict_offensive")
 def predict_binary(X_pred=str):
 
     #preprocessing
@@ -71,7 +71,7 @@ def predict_binary(X_pred=str):
     return {"type of tweet": prediction}
 
 
-@app.get("/predict")
+@app.get("/predict_label")
 def predict_classif(tweet_a_predire):
 
     #preprocessing
@@ -85,7 +85,7 @@ def predict_classif(tweet_a_predire):
     X_pred_tok = tk.texts_to_sequences(X_pred)
     X_pred_pad = pad_sequences(X_pred_tok, dtype='float32', padding='post', maxlen = 180)
 
-    model = load_model("CNN_classif")
+    model = load_model("GRU_classif")
     y_pred = model.predict(X_pred_pad)
 
     probabilities = np.array(y_pred)
@@ -93,6 +93,7 @@ def predict_classif(tweet_a_predire):
 
     label = df.idxmax(axis=1).iloc[0]
 
+    print(label)
     return {"label": label}
 
 

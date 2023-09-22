@@ -7,7 +7,7 @@ import numpy as np
 from tensorflow.keras.utils import pad_sequences
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.text import text_to_word_sequence
-from tensorflow.keras.preprocessing.text import Tokenizer
+
 from tensorflow.keras.layers import Embedding
 
 
@@ -67,7 +67,7 @@ def classif_GRU_model():
 
     model.add(layers.GRU(20, return_sequences=True, activation="tanh"))
     model.add(layers.GRU(20, activation="tanh"))
-    model.add(layers.Dense(6, activation="sigmoid"))
+    model.add(layers.Dense(6, activation="softmax"))
     model.summary()
 
     model.compile(loss='binary_crossentropy',
@@ -111,7 +111,7 @@ def classif_cnn_model():
     X_train_pad = pad_sequences(X_train_token, dtype='float32', padding='post', maxlen = 180)
     X_test_pad = pad_sequences(X_test_token, dtype='float32', padding='post', maxlen = 180)
 
-    breakpoint()
+
     # Size of your embedding space = size of the vector representing each word
     embedding_size = 50
 
@@ -126,7 +126,7 @@ def classif_cnn_model():
 
     # Students will be ending their code here
 
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     print(model.summary())
 
     # Change the number of epochs and the batch size depending on the RAM Size
@@ -214,7 +214,7 @@ def full_model_classif():
     model.add(layers.Dense(7, activation="softmax"))
     model.summary()
 
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss='categorical_crossentropy',
                 optimizer='rmsprop',
                 metrics=['accuracy'])
 
